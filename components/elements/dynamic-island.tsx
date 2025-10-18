@@ -29,7 +29,7 @@ export default function DynamicIsland() {
         animate={isError ? "vibrate" : "initial"}
         onClick={() => setExpand((prev) => !prev)}
         className={cn(
-          "bg-orange-accent-500/90 grid size-8 place-content-center rounded-full border text-xs font-bold text-zinc-200 backdrop-blur-3xl transition-colors duration-300 ease-in-out",
+          "bg-orange-accent-500/90 grid size-8 place-content-center rounded-full border text-xs font-bold text-zinc-100 backdrop-blur-3xl transition-colors duration-300 ease-in-out",
           { "bg-red-500 text-white": isError },
         )}
       >
