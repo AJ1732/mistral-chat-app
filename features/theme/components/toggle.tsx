@@ -1,0 +1,72 @@
+"use client";
+
+import { Moon, Sun } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { useEffect, useState } from "react";
+
+export const toggleVariant = {
+  initial: { opacity: 0, scale: 0.8, filter: "blur(4px)" },
+  animate: { opacity: 1, scale: 1, filter: "blur(0px)" },
+  exit: { opacity: 0, scale: 0.8, filter: "blur(4px)" },
+};
+
+type Theme = "light" | "dark";
+
+export default function ThemeToggle() {
+  const [theme, setTheme] = useState<Theme | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme") as Theme | null;
+    const initial =
+      stored ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light");
+    setTheme(initial);
+  }, []);
+
+  useEffect(() => {
+    if (!theme) return;
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  if (!theme) return null;
+
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="dark:border-border grid size-8 place-content-center rounded-full border border-neutral-300 bg-zinc-200/80 backdrop-blur-3xl dark:bg-zinc-800/80"
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        {theme === "dark" ? (
+          <motion.span
+            key={"moon"}
+            variants={toggleVariant}
+            initial={"initial"}
+            animate={"animate"}
+            exit={"exit"}
+            transition={{ duration: 0.1 }}
+          >
+            <Moon size={16} />
+          </motion.span>
+        ) : (
+          <motion.span
+            key={"sun"}
+            variants={toggleVariant}
+            initial={"initial"}
+            animate={"animate"}
+            exit={"exit"}
+            transition={{ duration: 0.1 }}
+          >
+            <Sun size={16} />
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </button>
+  );
+}
