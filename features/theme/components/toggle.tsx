@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 
 export const toggleVariant = {
   initial: { opacity: 0, scale: 0.8, filter: "blur(4px)" },
@@ -10,37 +10,17 @@ export const toggleVariant = {
   exit: { opacity: 0, scale: 0.8, filter: "blur(4px)" },
 };
 
-type Theme = "light" | "dark";
-
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme | null>(null);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("theme") as Theme | null;
-    const initial =
-      stored ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light");
-    setTheme(initial);
-  }, []);
-
-  useEffect(() => {
-    if (!theme) return;
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  const { theme, setTheme, systemTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   if (!theme) return null;
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
       className="dark:border-border grid size-8 place-content-center rounded-full border border-neutral-300 bg-zinc-200/80 backdrop-blur-3xl dark:bg-zinc-800/80"
+      aria-label="Toggle theme"
     >
       <AnimatePresence mode="wait" initial={false}>
         {theme === "dark" ? (

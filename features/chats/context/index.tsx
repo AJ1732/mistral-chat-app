@@ -17,7 +17,11 @@ type ChatAction =
   | { type: "ADD_MESSAGE"; payload: ChatMessage }
   | {
       type: "UPDATE_MESSAGE";
-      payload: { id: string; text: string; detectedLanguage?: string };
+      payload: { id: string; text: string };
+    }
+  | {
+      type: "APPEND_TO_MESSAGE";
+      payload: { id: string; chunk: string };
     }
   | { type: "RESET_CHAT" };
 
@@ -39,7 +43,20 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
                 text: action.payload.text,
                 loading: false,
               }
-            : msg
+            : msg,
+        ),
+      };
+    case "APPEND_TO_MESSAGE":
+      return {
+        ...state,
+        messages: state.messages.map((msg) =>
+          msg.id === action.payload.id
+            ? {
+                ...msg,
+                text: msg.text + action.payload.chunk,
+                loading: false,
+              }
+            : msg,
         ),
       };
     case "RESET_CHAT":
@@ -55,14 +72,18 @@ interface ChatContextProps {
   addChatMessage: (args: {
     text: ChatMessage["text"];
     sender: ChatMessage["sender"];
-  }) => void;
+  }) => string; // NOW RETURNS ID
+  updateChatMessage: (id: string, text: string) => void;
+  appendToMessage: (id: string, chunk: string) => void;
   startNewChat: () => void;
 }
 
 const ChatContext = createContext<ChatContextProps>({
   state: initialState,
   dispatch: () => null,
-  addChatMessage: () => {},
+  addChatMessage: () => "",
+  updateChatMessage: () => {},
+  appendToMessage: () => {},
   startNewChat: () => {},
 });
 
@@ -76,13 +97,24 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     text: ChatMessage["text"];
     sender: ChatMessage["sender"];
   }) => {
+    const id = uuidv4();
     const message: ChatMessage = {
-      id: uuidv4(),
+      id,
       text,
       sender,
+      loading: sender === "ai" && text === "",
     };
 
     dispatch({ type: "ADD_MESSAGE", payload: message });
+    return id;
+  };
+
+  const updateChatMessage = (id: string, text: string) => {
+    dispatch({ type: "UPDATE_MESSAGE", payload: { id, text } });
+  };
+
+  const appendToMessage = (id: string, chunk: string) => {
+    dispatch({ type: "APPEND_TO_MESSAGE", payload: { id, chunk } });
   };
 
   const startNewChat = () => dispatch({ type: "RESET_CHAT" });
@@ -93,6 +125,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         state,
         dispatch,
         addChatMessage,
+        updateChatMessage,
+        appendToMessage,
         startNewChat,
       }}
     >

@@ -21,7 +21,7 @@ export default function DynamicIsland() {
   }, [notification]);
 
   return (
-    <section className="fixed inset-x-0 top-4 flex w-full justify-center gap-3 md:top-3">
+    <section className="fixed inset-x-0 top-4 z-50 flex w-full justify-center gap-3 md:top-3">
       {/* ISLAND TOGGLE */}
       <motion.button
         variants={ICON_VARIANTS}

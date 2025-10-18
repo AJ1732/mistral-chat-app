@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Send } from "lucide-react";
 import { useEffect } from "react";
 import { z } from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
@@ -18,21 +19,23 @@ import { Textarea } from "@/components/ui/textarea";
 import { useNotifications } from "@/provider/notifications";
 
 import { useChat } from "../context";
+import { usePostChatStream } from "../queries";
 
 const FormSchema = z.object({
   chat: z
     .string("Bio is required.")
-    .min(10, {
-      message: "Chat must be at least 10 characters.",
+    .min(1, {
+      message: "Message is required.",
     })
-    .max(160, {
-      message: "Question must not be longer than 30 characters.",
+    .max(500, {
+      message: "Question must not be longer than 500 characters.",
     }),
 });
 
 export default function Chatbox() {
-  const { addChatMessage } = useChat();
+  const { addChatMessage, appendToMessage } = useChat();
   const { addNotification, removeNotification } = useNotifications();
+  const { mutateAsync: postChatStream, isPending } = usePostChatStream();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -54,9 +57,19 @@ export default function Chatbox() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     addChatMessage({ text: data.chat, sender: "user" });
-    addNotification({ message: "Analyzing", type: "loading" });
-    setTimeout(() => removeNotification(), 3000);
-    setTimeout(() => addChatMessage({ text: data.chat, sender: "ai" }), 3500);
+
+    const aiMessageId = addChatMessage({ text: "", sender: "ai" });
+    await postChatStream(
+      {
+        data: { message: data.chat },
+        onChunk: (chunk: string) => {
+          appendToMessage(aiMessageId, chunk); // Append each chunk to the AI message
+        },
+      },
+      {
+        onSuccess: () => form.reset(),
+      },
+    );
   }
 
   return (
@@ -71,6 +84,7 @@ export default function Chatbox() {
               <FormControl>
                 <Textarea
                   placeholder="Ask anything"
+                  disabled={isPending}
                   className="no-scrollbar max-h-80 pr-8 leading-[200%]"
                   {...field}
                 />
@@ -82,6 +96,7 @@ export default function Chatbox() {
         <Button
           type="submit"
           size={"icon"}
+          disabled={isPending}
           className="absolute right-3 bottom-3 size-10"
         >
           <Send />

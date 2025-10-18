@@ -101,8 +101,6 @@ This application uses Mistral AI's public completion API. The integration is han
 
 ### Example API Usage
 
-### Example API Usage
-
 The application uses the official Mistral AI JavaScript SDK:
 
 ```typescript
