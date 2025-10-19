@@ -1,11 +1,13 @@
 "use client";
-import { MessageSquareText, MousePointerClick } from "lucide-react";
+import { MousePointerClick } from "lucide-react";
 import { AnimatePresence, motion, Variants } from "motion/react";
 import { useEffect, useState } from "react";
 
 import { ThemeToggle } from "@/features/theme/components";
 import { useNotifications } from "@/provider/notifications";
 import { cn } from "@/lib/utils";
+
+// import ProfileAvatar from "./profile-avatar";
 
 export default function DynamicIsland() {
   const [expand, setExpand] = useState(false);
@@ -90,7 +92,19 @@ export default function DynamicIsland() {
         </AnimatePresence>
       </motion.div>
 
-      <ThemeToggle />
+      <div className="relative">
+        <ThemeToggle />
+        {/* <motion.div
+          animate={{
+            y: expand ? 40 : 0,
+            x: expand ? 0 : 40,
+          }}
+          transition={{ type: "tween", duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+          className="absolute top-0 left-0"
+        >
+          <ProfileAvatar className="size-8 text-base" />
+        </motion.div> */}
+      </div>
     </section>
   );
 }

@@ -187,7 +187,7 @@ model: "mistral-tiny";
 
 ## 📝 Future Enhancements
 
-- [ ] Message streaming for real-time responses
+- [x] Message streaming for real-time responses
 - [ ] Conversation history persistence
 - [ ] Multi-model support with model selection
 - [ ] Export chat conversations

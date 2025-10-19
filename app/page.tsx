@@ -1,24 +1,45 @@
-import { DynamicIsland } from "@/components/elements";
-import { Chatbox, ChatDialogs } from "@/features/chats/components";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/features/theme/components";
+import { ProfileAvatar } from "@/components/elements";
 
 export default function Home() {
   return (
-    <main className="md:content-grid relative min-h-dvh grid-rows-[1fr] place-content-start">
-      <section
-        className={cn(
-          "absolute max-md:inset-0 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
-          "md:max-w-wPhone md:max-h-hPhone bg-phone m-auto grid size-full grid-rows-[1fr] gap-3 p-4 md:rounded-[3.5rem] md:border md:p-3",
-          "transition-colors duration-300 ease-in",
-        )}
-      >
-        <DynamicIsland />
-        <ChatDialogs />
-        <Chatbox />
-        <div
-          aria-hidden
-          className="mx-auto mt-2 h-4 w-8 rounded-full border bg-black"
-        />
+    <main className="content-grid min-h-dvh bg-[url('/images/mistral-pattern.webp')] bg-contain bg-no-repeat lg:bg-cover">
+      <section className="relative flex justify-center gap-8 max-xl:flex-col max-xl:py-16">
+        <div className="absolute top-4 right-0 flex items-center gap-4">
+          <ProfileAvatar />
+          <ThemeToggle />
+        </div>
+        <header className="flex flex-col justify-center gap-4 lg:min-w-lg">
+          <h1 className="text-5xl leading-[130%] md:text-6xl xl:text-7xl">
+            <span className="text-orange-accent-500">Mistral AI</span> <br />{" "}
+            Chat App
+          </h1>
+          <p className="max-w-lg leading-[200%] xl:text-lg">
+            A modern, real-time chat application built, powered by Mistral AI's
+            completion API.
+          </p>
+          <Button asChild className="mt-4 min-w-40 lg:w-fit">
+            <Link href={"/chat"}>Try It Out</Link>
+          </Button>
+        </header>
+        <div className="flex flex-col pt-8">
+          <figure className="ml-auto size-60 md:size-72 lg:size-80">
+            <Image
+              alt="LeChat - Mistral"
+              loading="lazy"
+              width="100"
+              height="100"
+              decoding="async"
+              data-nimg="1"
+              className="size-full object-contain pt-2"
+              src="https://cms.mistral.ai/assets/920e56ee-25c5-439d-bd31-fbdf5c92c87f"
+            ></Image>
+          </figure>
+        </div>
       </section>
     </main>
   );

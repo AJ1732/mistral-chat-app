@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useTheme } from "next-themes";
@@ -10,7 +11,7 @@ export const toggleVariant = {
   exit: { opacity: 0, scale: 0.8, filter: "blur(4px)" },
 };
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
 
@@ -19,7 +20,10 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
-      className="dark:border-border grid size-8 place-content-center rounded-full border border-neutral-300 bg-zinc-200/80 backdrop-blur-3xl dark:bg-zinc-800/80"
+      className={cn(
+        "dark:border-border grid size-8 place-content-center rounded-full border border-neutral-300 bg-zinc-200/80 backdrop-blur-3xl dark:bg-zinc-800/80",
+        className,
+      )}
       aria-label="Toggle theme"
     >
       <AnimatePresence mode="wait" initial={false}>
