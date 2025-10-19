@@ -19,7 +19,7 @@ export default function Home() {
             Chat App
           </h1>
           <p className="max-w-lg leading-[200%] xl:text-lg">
-            A modern, real-time chat application built, powered by Mistral AI's
+            A modern, real-time chat application built, powered by Mistral AI&apos;s
             completion API.
           </p>
           <Button asChild className="mt-4 min-w-40 lg:w-fit">
