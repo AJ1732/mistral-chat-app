@@ -53,8 +53,8 @@ export async function POST(req: Request) {
         "Transfer-Encoding": "chunked",
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
     return NextResponse.json(
       { error: err.message || "Server error" },
       { status: 500, headers: { "Content-Type": "application/json" } },

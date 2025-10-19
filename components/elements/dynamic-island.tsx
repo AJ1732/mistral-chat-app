@@ -13,7 +13,7 @@ export default function DynamicIsland() {
   const [expand, setExpand] = useState(false);
   const { notification } = useNotifications();
 
-  const isInfo = notification?.type === "info";
+  // const isInfo = notification?.type === "info";
   const isError = notification?.type === "error";
   const isLoading = notification?.type === "loading";
 
