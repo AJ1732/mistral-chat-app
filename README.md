@@ -9,7 +9,7 @@ A modern, real-time chat application built with Next.js and TypeScript, powered 
 - **Dynamic Island Component**: Elegant status indicators and notifications
 - **Responsive Design**: Mobile-first design using Tailwind CSS
 - **TypeScript**: Full type safety throughout the application
-- **Modern Stack**: Built with Next.js 14+ and React best practices
+- **Modern Stack**: Built with Next.js 15+ and React best practices
 
 ## 📋 Prerequisites
 
