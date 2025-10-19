@@ -2,15 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/features/theme/components";
-import { ProfileAvatar } from "@/components/elements";
+import { ThemeToggle } from "@/components/elements";
 
 export default function Home() {
   return (
     <main className="content-grid min-h-dvh bg-[url('/images/mistral-pattern.webp')] bg-contain bg-no-repeat lg:bg-cover">
       <section className="relative flex justify-center gap-8 max-xl:flex-col max-xl:py-16">
         <div className="absolute top-4 right-0 flex items-center gap-4">
-          <ProfileAvatar />
           <ThemeToggle />
         </div>
         <header className="flex flex-col justify-center gap-4 lg:min-w-lg">
@@ -19,8 +17,8 @@ export default function Home() {
             Chat App
           </h1>
           <p className="max-w-lg leading-[200%] xl:text-lg">
-            A modern, real-time chat application built, powered by Mistral AI&apos;s
-            completion API.
+            A modern, real-time chat application built, powered by Mistral
+            AI&apos;s completion API.
           </p>
           <Button asChild className="mt-4 min-w-40 lg:w-fit">
             <Link href={"/chat"}>Try It Out</Link>

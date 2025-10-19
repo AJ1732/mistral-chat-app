@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeScript } from "@/features/theme/utils/script";
 import { Providers } from "@/provider";
 import "./globals.css";
 
@@ -97,9 +96,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <ThemeScript />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-mono antialiased`}
       >

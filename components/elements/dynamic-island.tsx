@@ -3,11 +3,10 @@ import { MousePointerClick } from "lucide-react";
 import { AnimatePresence, motion, Variants } from "motion/react";
 import { useEffect, useState } from "react";
 
-import { ThemeToggle } from "@/features/theme/components";
 import { useNotifications } from "@/provider/notifications";
 import { cn } from "@/lib/utils";
 
-// import ProfileAvatar from "./profile-avatar";
+import ThemeToggle from "./theme-toggle";
 
 export default function DynamicIsland() {
   const [expand, setExpand] = useState(false);
@@ -92,19 +91,7 @@ export default function DynamicIsland() {
         </AnimatePresence>
       </motion.div>
 
-      <div className="relative">
-        <ThemeToggle />
-        {/* <motion.div
-          animate={{
-            y: expand ? 40 : 0,
-            x: expand ? 0 : 40,
-          }}
-          transition={{ type: "tween", duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
-          className="absolute top-0 left-0"
-        >
-          <ProfileAvatar className="size-8 text-base" />
-        </motion.div> */}
-      </div>
+      <ThemeToggle />
     </section>
   );
 }
@@ -123,9 +110,6 @@ const VARIANTS: Variants = {
 const ICON_VARIANTS: Variants = {
   initial: { x: 0 },
   vibrate: {
-    // Phone vibration -> faster, smaller movements
-    // x: [0, -2, 2, -2, 2, -1, 1, -1, 1, 0],
-    // x: [0, -2, 2, 0, -2, 2, 0, -1, 1, 0],
     x: [0, -3, 3, -2, 2, -3, 3, -1, 1, 0],
     y: [0, -2, 2, 0, -2, 2, 0, -1, 1, 0],
     transition: {

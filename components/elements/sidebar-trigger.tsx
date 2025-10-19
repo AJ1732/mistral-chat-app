@@ -1,7 +1,7 @@
 "use client";
 
 import { SetStateAction, useState } from "react";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, Search } from "lucide-react";
 import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -12,19 +12,19 @@ import {
   SIDEBAR_MENU_VARIANTS,
   SIDEBAR_VARIANTS,
 } from "./variants";
-// import { Input } from "../ui/input";
+import { Input } from "../ui/input";
 
 export default function SidebarTrigger() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-  // const [isSSearchOpen, setIsSSearchOpen] = useState(false);
-  // const toggleSearch = () => setIsSSearchOpen((prev) => !prev);
+  const [isSSearchOpen, setIsSSearchOpen] = useState(false);
+  const toggleSearch = () => setIsSSearchOpen((prev) => !prev);
 
   return (
     <div className="relative mx-3 mb-4 flex">
       <Sidebar {...{ isSidebarOpen, setIsSidebarOpen }} />
 
-      {/* <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-2">
         {isSSearchOpen && (
           <Input
             className={cn(
@@ -46,7 +46,7 @@ export default function SidebarTrigger() {
             <Search />
           </Button>
         )}
-      </div> */}
+      </div>
 
       <Button
         size={"icon"}
