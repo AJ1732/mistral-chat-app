@@ -74,7 +74,10 @@ export default function Chatbox() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="relative w-full">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="relative h-fit w-full drop-shadow-xl"
+      >
         <FormField
           control={form.control}
           name="chat"

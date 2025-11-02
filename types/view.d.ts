@@ -1,0 +1,2 @@
+type ViewType = "chats" | "profile";
+

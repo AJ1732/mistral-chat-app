@@ -6,11 +6,13 @@ import { MarkdownMessage } from "@/components/elements";
 import { cn } from "@/lib/utils";
 
 import { useChat } from "../context";
+import { useViewBehindContext } from "../context/view-behind";
 
 export default function ChatDialogs() {
   const {
     state: { messages },
   } = useChat();
+  const { isViewOpen } = useViewBehindContext();
 
   const scrollRef = useRef<HTMLUListElement>(null);
 
@@ -21,87 +23,90 @@ export default function ChatDialogs() {
   }, [messages]);
 
   return (
-    <article
-      ref={scrollRef}
-      className="no-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto bg-red-500 pt-10 pb-2 md:rounded-t-[2.5rem] md:rounded-b-lg"
+    <motion.div
+      key={"chat-dialogs"}
+      initial={false}
+      animate={{ opacity: 1, height: "auto" }}
+      transition={{
+        type: "spring",
+        stiffness: 160,
+        damping: 22,
+        duration: 0.2,
+        ease: [0.34, 1.56, 0.64, 1],
+      }}
+      className={cn(
+        "no-scrollbar h-full bg-red-500 relative z-0 -mb-16 h-full flex-1 overflow-y-auto pb-2",
+        !isViewOpen && "md:rounded-t-[2.875rem]",
+      )}
     >
-      <ul
-        role="list"
-        aria-live="polite"
-        className="mt-auto space-y-8 leading-[200%]"
+      <article
+        ref={scrollRef}
+        className={cn(
+          "flex min-h-0 flex-col transition-[padding]",
+          isViewOpen ? "md:rounded-t-2xl" : "pt-10 md:rounded-t-[2.5rem]",
+        )}
       >
-        <li>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam quos
-          alias illo commodi adipisci obcaecati ducimus rerum perferendis,
-          nesciunt odit modi placeat nostrum iste nihil officia sit quas quod
-          necessitatibus doloribus! Eius, est debitis molestiae, repellat
-          aspernatur culpa facilis mollitia quis quaerat suscipit deleniti animi
-          cum inventore maiores recusandae rerum totam numquam cupiditate
-          maxime? Quisquam accusamus quidem illum repellat labore officiis
-          temporibus tempore, tenetur doloremque laborum quibusdam obcaecati,
-          rerum excepturi unde. Iste expedita omnis tempore quod eveniet quas.
-          Reiciendis dolore possimus hic, rem maiores illum velit quisquam
-          delectus minima vero voluptatibus distinctio eius adipisci temporibus
-          incidunt dolorum esse repellendus impedit!
-        </li>
-        <AnimatePresence mode="wait">
-          {messages.map(({ id, text, sender, loading }) => {
-            const isUser = sender === "user";
-            const isAI = sender === "ai";
-
-            return (
-              <motion.li
-                key={id}
-                role="listitem"
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{
-                  duration: 0.3,
-                  ease: [0.34, 1.56, 0.64, 1],
-                }}
-                className={cn(
-                  "overflow-wrap-anywhere word-break-break-word flex max-w-[90%] flex-col gap-px text-pretty break-words hyphens-auto",
-                  {
-                    "text-orange-accent-500 dark:text-orange-accent-50 [&>div:has(small)]:text-left":
-                      isAI,
-                  },
-                  {
-                    "ml-auto text-right dark:text-zinc-300 [&>div:has(small)]:ml-auto":
-                      isUser,
-                  },
-                )}
-              >
-                <div
+        <ul
+          role="list"
+          aria-live="polite"
+          className="mt-auto space-y-8 leading-[200%]"
+        >
+          <AnimatePresence mode="wait">
+            {messages.map(({ id, text, sender, loading }) => {
+              const isUser = sender === "user";
+              const isAI = sender === "ai";
+              return (
+                <motion.li
+                  key={id}
+                  role="list-item"
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.34, 1.56, 0.64, 1],
+                  }}
                   className={cn(
-                    "relative",
-                    "prose-ul:list-disc prose-ul:ml-4 prose-ol:list-decimal prose-ol:ml-5",
-                    "prose prose-sm dark:prose-invert prose-pre:bg-zinc-900 prose-pre:text-zinc-100 prose-code:text-orange-500 dark:prose-code:text-orange-400 max-w-none",
+                    "overflow-wrap-anywhere flex max-w-[90%] flex-col text-pretty break-words hyphens-auto",
+                    {
+                      "text-orange-accent-500 dark:text-orange-accent-50 [&>div:has(small)]:text-left":
+                        isAI,
+                    },
+                    {
+                      "ml-auto text-right dark:text-zinc-300 [&>div:has(small)]:ml-auto":
+                        isUser,
+                    },
                   )}
                 >
-                  {isAI ? (
-                    <MarkdownMessage content={text} />
-                  ) : (
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                      className="block whitespace-pre-wrap"
-                    >
-                      {text}
-                    </motion.p>
-                  )}
-
-                  {isAI && loading && <TypingIndicator />}
-                </div>
-
-                <ChatStamp {...{ isAI, isUser }} />
-              </motion.li>
-            );
-          })}
-        </AnimatePresence>
-      </ul>
-    </article>
+                  <div
+                    className={cn(
+                      "relative",
+                      "prose-ul:list-disc prose-ul:ml-4 prose-ol:list-decimal prose-ol:ml-5",
+                      "prose prose-sm dark:prose-invert prose-pre:bg-zinc-900 prose-pre:text-zinc-100 prose-code:text-orange-500 dark:prose-code:text-orange-400 max-w-none",
+                    )}
+                  >
+                    {isAI ? (
+                      <MarkdownMessage content={text} />
+                    ) : (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="block whitespace-pre-wrap"
+                      >
+                        {text}
+                      </motion.p>
+                    )}
+                    {isAI && loading && <TypingIndicator />}
+                  </div>
+                  <ChatStamp {...{ isAI, isUser }} />
+                </motion.li>
+              );
+            })}
+          </AnimatePresence>
+        </ul>
+      </article>
+    </motion.div>
   );
 }
 
