@@ -35,7 +35,7 @@ export default function ChatDialogs() {
         ease: [0.34, 1.56, 0.64, 1],
       }}
       className={cn(
-        "no-scrollbar h-full bg-red-500 relative z-0 -mb-16 h-full flex-1 overflow-y-auto pb-2",
+        "no-scrollbar h-full  relative z-0 -mb-16 h-full flex-1 overflow-y-auto pb-2",
         !isViewOpen && "md:rounded-t-[2.875rem]",
       )}
     >
