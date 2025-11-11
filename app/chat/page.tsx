@@ -15,7 +15,7 @@ export default function ChatPage() {
         className={cn(
           "absolute my-4 max-md:inset-0 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
           "transition-colors duration-300 ease-out",
-          "bg-phone grid-rows-[1fr m-auto grid size-full p-4",
+          "bg-phone m-auto grid size-full grid-rows-[1fr] p-4",
           "md:max-w-wPhone md:max-h-hPhone md:rounded-[3.5rem] md:border md:p-3",
         )}
       >

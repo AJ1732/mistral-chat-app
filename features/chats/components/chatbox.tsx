@@ -88,8 +88,18 @@ export default function Chatbox() {
                 <Textarea
                   placeholder="Ask anything"
                   disabled={isPending}
-                  className="no-scrollbar max-h-80 pr-8 leading-[200%]"
+                  className="no-scrollbar max-h-80 pr-16 leading-[200%]"
                   {...field}
+                  onKeyDown={(e) => {
+                    if (
+                      window.innerWidth >= 640 &&
+                      e.key === "Enter" &&
+                      !e.shiftKey
+                    ) {
+                      e.preventDefault();
+                      form.handleSubmit(onSubmit)();
+                    }
+                  }}
                 />
               </FormControl>
             </FormItem>

@@ -8,11 +8,17 @@ import { cn } from "@/lib/utils";
 import { useChat } from "../context";
 import { useViewBehindContext } from "../context/view-behind";
 
+const variants = {
+  initial: { opacity: 0, height: 0 },
+  animate: { opacity: 1, height: "100%", borderTopRadius: "2.875rem" },
+  shrink: { opacity: 1, height: "5rem" },
+};
+
 export default function ChatDialogs() {
   const {
     state: { messages },
   } = useChat();
-  const { isViewOpen } = useViewBehindContext();
+  const { isViewOpen, closeView } = useViewBehindContext();
 
   const scrollRef = useRef<HTMLUListElement>(null);
 
@@ -25,25 +31,21 @@ export default function ChatDialogs() {
   return (
     <motion.div
       key={"chat-dialogs"}
-      initial={false}
-      animate={{ opacity: 1, height: "auto" }}
-      transition={{
-        type: "spring",
-        stiffness: 160,
-        damping: 22,
-        duration: 0.2,
-        ease: [0.34, 1.56, 0.64, 1],
-      }}
+      variants={variants}
+      initial={"initial"}
+      animate={isViewOpen ? "shrink" : "animate"}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      onClick={closeView}
       className={cn(
-        "no-scrollbar h-full  relative z-0 -mb-16 h-full flex-1 overflow-y-auto pb-2",
+        "no-scrollbar relative z-0 flex-1 overflow-y-auto pb-2",
         !isViewOpen && "md:rounded-t-[2.875rem]",
       )}
     >
       <article
         ref={scrollRef}
         className={cn(
-          "flex min-h-0 flex-col transition-[padding]",
-          isViewOpen ? "md:rounded-t-2xl" : "pt-10 md:rounded-t-[2.5rem]",
+          "flex flex-col transition-[padding]",
+          !isViewOpen && "pt-10 md:rounded-t-[2.5rem]",
         )}
       >
         <ul
@@ -51,7 +53,7 @@ export default function ChatDialogs() {
           aria-live="polite"
           className="mt-auto space-y-8 leading-[200%]"
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout">
             {messages.map(({ id, text, sender, loading }) => {
               const isUser = sender === "user";
               const isAI = sender === "ai";
@@ -105,6 +107,31 @@ export default function ChatDialogs() {
             })}
           </AnimatePresence>
         </ul>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem et
+          sed nisi! Ad neque recusandae rerum ducimus labore consequuntur
+          voluptas tenetur dolorum atque aspernatur culpa mollitia, molestias
+          asperiores rem totam laboriosam voluptate dolor eum porro.
+          Reprehenderit odio culpa quod voluptatum enim, natus soluta dolor
+          cumque voluptas iure aliquam sapiente, possimus illum sunt cum saepe
+          ipsum rem voluptatibus optio esse modi. Expedita cumque molestiae
+          vitae veritatis, aliquid et inventore facilis voluptatem commodi
+          blanditiis. Dolorem corporis nobis possimus sit odit ex nam culpa fuga
+          asperiores impedit velit voluptatum unde, facere at maxime illum quam
+          commodi ipsa suscipit quasi quae animi perferendis laudantium quod?
+          Voluptatem sapiente itaque autem quis aperiam, labore suscipit dicta,
+          unde mollitia, similique eligendi aliquam qui corporis culpa ipsum!
+          Sunt consectetur pariatur eos, sapiente, vel sit consequuntur ab non
+          quos dolores obcaecati reprehenderit dicta dolore maxime laboriosam
+          deserunt nostrum accusamus ullam voluptas ipsam quisquam ipsum ratione
+          repellendus! Ipsa labore obcaecati itaque repellendus consequatur,
+          voluptates assumenda ipsam vel delectus iste est quia! Ipsam,
+          inventore! Vero repellat distinctio quisquam a neque delectus magnam
+          magni, consectetur dolor laborum qui est cupiditate dignissimos
+          dolores asperiores officia itaque molestiae eum cum totam quis
+          similique? Esse, ipsum illo velit quam sit doloremque provident
+          repellendus harum nemo
+        </p>
       </article>
     </motion.div>
   );
