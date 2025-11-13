@@ -18,10 +18,15 @@ export const usePostChatStream = () => {
       return ChatService.postChatStream(data, onChunk);
     },
     onMutate: () => addNotification({ message: "Thinking", type: "loading" }),
-    onSettled: () => removeNotification(),
+    onSuccess: () => removeNotification(),
     onError: (error) => {
       console.log("Error:", error);
-      addNotification({ message: "Something went wrong", type: "error" });
+      addNotification({
+        message: "Failed to get response. Please try again.",
+        type: "error"
+      });
+      // Auto-dismiss error after 3 seconds
+      // setTimeout(() => removeNotification(), 3000);
     },
   });
 };

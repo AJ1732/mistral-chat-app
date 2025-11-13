@@ -3,6 +3,7 @@ interface ChatMessage {
   text: string;
   sender: "user" | "ai";
   loading?: boolean;
+  error?: boolean;
 }
 
 interface ChatPost {

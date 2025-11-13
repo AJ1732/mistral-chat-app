@@ -23,6 +23,10 @@ type ChatAction =
       type: "APPEND_TO_MESSAGE";
       payload: { id: string; chunk: string };
     }
+  | {
+      type: "SET_MESSAGE_ERROR";
+      payload: { id: string };
+    }
   | { type: "RESET_CHAT" };
 
 const initialState: ChatState = {
@@ -59,6 +63,19 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
             : msg,
         ),
       };
+    case "SET_MESSAGE_ERROR":
+      return {
+        ...state,
+        messages: state.messages.map((msg) =>
+          msg.id === action.payload.id
+            ? {
+                ...msg,
+                loading: false,
+                error: true,
+              }
+            : msg,
+        ),
+      };
     case "RESET_CHAT":
       return initialState;
     default:
@@ -75,6 +92,7 @@ interface ChatContextProps {
   }) => string; // NOW RETURNS ID
   updateChatMessage: (id: string, text: string) => void;
   appendToMessage: (id: string, chunk: string) => void;
+  setMessageError: (id: string) => void;
   startNewChat: () => void;
 }
 
@@ -84,6 +102,7 @@ const ChatContext = createContext<ChatContextProps>({
   addChatMessage: () => "",
   updateChatMessage: () => {},
   appendToMessage: () => {},
+  setMessageError: () => {},
   startNewChat: () => {},
 });
 
@@ -117,6 +136,10 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: "APPEND_TO_MESSAGE", payload: { id, chunk } });
   };
 
+  const setMessageError = (id: string) => {
+    dispatch({ type: "SET_MESSAGE_ERROR", payload: { id } });
+  };
+
   const startNewChat = () => dispatch({ type: "RESET_CHAT" });
 
   return (
@@ -127,6 +150,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         addChatMessage,
         updateChatMessage,
         appendToMessage,
+        setMessageError,
         startNewChat,
       }}
     >

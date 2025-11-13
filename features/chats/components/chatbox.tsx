@@ -33,7 +33,7 @@ const FormSchema = z.object({
 });
 
 export default function Chatbox() {
-  const { addChatMessage, appendToMessage } = useChat();
+  const { addChatMessage, appendToMessage, setMessageError } = useChat();
   const { addNotification, removeNotification } = useNotifications();
   const { mutateAsync: postChatStream, isPending } = usePostChatStream();
 
@@ -59,17 +59,27 @@ export default function Chatbox() {
     addChatMessage({ text: data.chat, sender: "user" });
 
     const aiMessageId = addChatMessage({ text: "", sender: "ai" });
-    await postChatStream(
-      {
-        data: { message: data.chat },
-        onChunk: (chunk: string) => {
-          appendToMessage(aiMessageId, chunk); // Append each chunk to the AI message
+
+    try {
+      await postChatStream(
+        {
+          data: { message: data.chat },
+          onChunk: (chunk: string) => {
+            appendToMessage(aiMessageId, chunk); // Append each chunk to the AI message
+          },
         },
-      },
-      {
-        onSuccess: () => form.reset(),
-      },
-    );
+        {
+          onSuccess: () => form.reset(),
+          onError: () => {
+            // Mark the message as failed
+            setMessageError(aiMessageId);
+          },
+        },
+      );
+    } catch {
+      // Additional catch for any unhandled errors
+      setMessageError(aiMessageId);
+    }
   }
 
   return (
