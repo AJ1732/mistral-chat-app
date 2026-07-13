@@ -2,8 +2,8 @@ import { DynamicIsland } from "@/components/elements";
 import {
   ChatBehind,
   ChatBehindTrigger,
-  ChatDialogs,
   Chatbox,
+  ChatDialogs,
 } from "@/features/chats/components";
 import { ViewBehindProvider } from "@/features/chats/context/view-behind";
 import { cn } from "@/lib/utils";

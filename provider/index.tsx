@@ -1,5 +1,5 @@
-import { Suspense } from "react";
 import { ThemeProvider } from "next-themes";
+import { Suspense } from "react";
 
 import { ChatProvider } from "@/features/chats/context";
 

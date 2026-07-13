@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState } from "react";
 
-
 interface ViewBehindContextProps {
   isViewOpen: boolean;
   activeView: ViewType;

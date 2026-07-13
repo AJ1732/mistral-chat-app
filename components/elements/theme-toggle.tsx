@@ -1,9 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTheme } from "next-themes";
+
+import { cn } from "@/lib/utils";
 
 export const toggleVariant = {
   initial: { opacity: 0, scale: 0.8, filter: "blur(4px)" },

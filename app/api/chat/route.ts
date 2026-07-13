@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
-
 import { Mistral } from "@mistralai/mistralai";
+import { NextResponse } from "next/server";
 
 const apiKey = process.env["MISTRAL_API_KEY"];
 const client = new Mistral({ apiKey: apiKey });

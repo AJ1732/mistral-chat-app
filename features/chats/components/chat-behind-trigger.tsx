@@ -1,8 +1,10 @@
 "use client";
 
 import { MoreHorizontal } from "lucide-react";
-import { useViewBehindContext } from "../context/view-behind";
+
 import { Button } from "@/components/ui/button";
+
+import { useViewBehindContext } from "../context/view-behind";
 
 export default function ChatBehindTrigger() {
   const { isViewOpen, toggleViewOpen } = useViewBehindContext();

@@ -1,18 +1,18 @@
 "use client";
 
-import { SetStateAction, useState } from "react";
 import { LayoutDashboard, Search } from "lucide-react";
 import { motion } from "motion/react";
+import { SetStateAction, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import {
   SIDEBAR_ITEM_VARIANTS,
   SIDEBAR_MENU_VARIANTS,
   SIDEBAR_VARIANTS,
 } from "./variants";
-import { Input } from "../ui/input";
 
 export default function SidebarTrigger() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

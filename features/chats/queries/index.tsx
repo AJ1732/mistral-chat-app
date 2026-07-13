@@ -23,7 +23,7 @@ export const usePostChatStream = () => {
       console.log("Error:", error);
       addNotification({
         message: "Failed to get response. Please try again.",
-        type: "error"
+        type: "error",
       });
       // Auto-dismiss error after 3 seconds
       // setTimeout(() => removeNotification(), 3000);
