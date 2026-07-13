@@ -48,7 +48,7 @@ export default function DynamicIsland() {
           ease: [0.4, 0, 0.2, 1],
         }}
         className={cn(
-          "justfy-center dark:border-border flex size-full items-center rounded-[1.75rem] border-[0.5px] border-neutral-400 bg-black/70 px-4 py-3 text-sm text-zinc-50 drop-shadow-2xl backdrop-blur-3xl transition-colors duration-300 ease-in dark:bg-black/50",
+          "justify-center dark:border-border flex size-full items-center rounded-[1.75rem] border-[0.5px] border-neutral-400 bg-black/70 px-4 py-3 text-sm text-zinc-50 drop-shadow-xl drop-shadow-neutral-400 backdrop-blur-3xl transition-colors duration-300 ease-in dark:bg-black/70 dark:drop-shadow-neutral-950",
           { "border-destructive dark:border-destructive/50": isError },
         )}
       >

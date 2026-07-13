@@ -124,8 +124,8 @@ export default function ChatBehind() {
                   willChange: "transform, opacity",
                 }}
                 className={cn(
-                  "flex flex-1 flex-col bg-neutral-50 drop-shadow-xl dark:bg-neutral-900",
-                  "no-scrollbar mt-11 overflow-y-auto rounded-[1.125rem] border p-3",
+                  "flex flex-1 flex-col drop-shadow-xl dark:bg-neutral-900",
+                  "no-scrollbar mt-11 overflow-y-auto rounded-[1.125rem] border",
                 )}
               >
                 <Component />

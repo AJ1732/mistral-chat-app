@@ -21,6 +21,7 @@ type NotificationsContextType = {
   addNotification: (notif: {
     message: string;
     type?: Notification["type"];
+    duration?: number;
   }) => void;
   removeNotification: () => void;
 };
@@ -48,18 +49,27 @@ export default function NotificationsProvider({
   }, []);
 
   const addNotification = useCallback(
-    (notif: { message: string; type?: Notification["type"] }) => {
-      const { message, type = "info" } = notif;
+    (notif: { message: string; type?: Notification["type"]; duration?: number }) => {
+      const { message, type = "info", duration } = notif;
 
       // Clear any existing timeout
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
 
       const id = uuidv4();
       const newNotification = { id, message, type };
 
       setNotification(newNotification);
+
+      // Auto-dismiss after duration if specified
+      if (duration !== undefined && duration > 0) {
+        timeoutRef.current = setTimeout(() => {
+          setNotification(null);
+          timeoutRef.current = null;
+        }, duration);
+      }
     },
     []
   );
