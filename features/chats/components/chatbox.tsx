@@ -1,11 +1,9 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { Send } from "lucide-react";
-import { useEffect } from "react";
-import { z } from "zod";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Send } from "lucide-react";
+import { type FieldErrors, useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,19 +41,16 @@ export default function Chatbox() {
     mode: "onSubmit",
   });
 
-  // If there is an error, show it as a notification
-  useEffect(() => {
-    if (form.formState.errors.chat?.message) {
-      addNotification({
-        message: form.formState.errors.chat.message,
-        type: "error",
-      });
-    } else {
-      removeNotification();
+  // Surface validation errors as a notification on submit (event-driven).
+  function onInvalid(errors: FieldErrors<z.infer<typeof FormSchema>>) {
+    const message = errors.chat?.message;
+    if (message) {
+      addNotification({ message, type: "error" });
     }
-  }, [form.formState.errors.chat?.message]);
+  }
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    removeNotification(); // clear any lingering validation error
     addChatMessage({ text: data.chat, sender: "user" });
 
     const aiMessageId = addChatMessage({ text: "", sender: "ai" });
@@ -85,7 +80,7 @@ export default function Chatbox() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, onInvalid)}
         className="relative h-fit w-full drop-shadow-xl"
       >
         <FormField
@@ -107,7 +102,7 @@ export default function Chatbox() {
                       !e.shiftKey
                     ) {
                       e.preventDefault();
-                      form.handleSubmit(onSubmit)();
+                      form.handleSubmit(onSubmit, onInvalid)();
                     }
                   }}
                 />

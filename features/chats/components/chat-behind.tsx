@@ -1,19 +1,19 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { type LucideIcon, MessageCircle, Search, User, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { MessageCircle, Search, User, X, type LucideIcon } from "lucide-react";
+import { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import { ChatHistory } from "./chat-history";
 import { useViewBehindContext } from "../context/view-behind";
+import { ChatHistory } from "./chat-history";
 import { ProfileView } from "./profile";
 
 type ViewConfig = {
   label: string;
   icon: LucideIcon;
-  component: React.ComponentType<any>;
+  component: React.ComponentType;
 };
 
 const VIEWS: Record<ViewType, ViewConfig> = {
@@ -52,16 +52,14 @@ export default function ChatBehind() {
   const isChats = activeView === "chats";
   const { label, icon: Icon, component: Component } = VIEWS[activeView];
 
-  const firstButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Auto-focus the first button when the view opens
-  useEffect(() => {
-    if (isViewOpen && firstButtonRef.current) {
-      // Small delay to ensure the animation has started
-      const timeoutId = setTimeout(() => firstButtonRef.current?.focus(), 100);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isViewOpen]);
+  // Auto-focus the first button once it mounts (the view opens). A callback ref
+  // fires exactly when the node attaches, so no effect is needed. The short
+  // delay lets the open animation start first; cleanup runs on detach.
+  const focusOnOpen = useCallback((node: HTMLButtonElement | null) => {
+    if (!node) return;
+    const timeoutId = setTimeout(() => node.focus(), 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <>
@@ -146,7 +144,7 @@ export default function ChatBehind() {
                 )}
               >
                 <Button
-                  ref={firstButtonRef}
+                  ref={focusOnOpen}
                   size={"icon"}
                   variant={"outline"}
                   onClick={() =>

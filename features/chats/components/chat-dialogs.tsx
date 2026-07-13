@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useRef } from "react";
 
 import { MarkdownMessage } from "@/components/elements";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
 import { cn } from "@/lib/utils";
 
 import { useChat } from "../context";
@@ -22,11 +23,7 @@ export default function ChatDialogs() {
 
   const scrollRef = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages]);
+  useAutoScroll(scrollRef, messages);
 
   return (
     <motion.div

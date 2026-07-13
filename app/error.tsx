@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { Button } from "@/components/ui/button";
+import { useMountEffect } from "@/hooks/use-mount-effect";
 
 export default function Error({
   error,
@@ -11,9 +10,9 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
+  useMountEffect(() => {
     console.error(error);
-  }, [error]);
+  });
 
   return (
     <div className="mx-auto min-h-dvh max-w-lg place-content-center space-y-3 px-4">

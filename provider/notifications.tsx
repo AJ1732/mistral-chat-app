@@ -2,11 +2,11 @@
 
 import {
   createContext,
-  useContext,
-  useState,
   ReactNode,
   useCallback,
+  useContext,
   useRef,
+  useState,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -49,7 +49,11 @@ export default function NotificationsProvider({
   }, []);
 
   const addNotification = useCallback(
-    (notif: { message: string; type?: Notification["type"]; duration?: number }) => {
+    (notif: {
+      message: string;
+      type?: Notification["type"];
+      duration?: number;
+    }) => {
       const { message, type = "info", duration } = notif;
 
       // Clear any existing timeout
@@ -71,7 +75,7 @@ export default function NotificationsProvider({
         }, duration);
       }
     },
-    []
+    [],
   );
 
   return (
@@ -87,7 +91,7 @@ export function useNotifications() {
   const context = useContext(NotificationsContext);
   if (!context) {
     throw new Error(
-      "useNotifications must be used within NotificationsProvider"
+      "useNotifications must be used within NotificationsProvider",
     );
   }
   return context;

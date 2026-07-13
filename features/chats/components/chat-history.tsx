@@ -19,6 +19,7 @@ export function ChatHistory() {
   const chats = Array.from({ length: MOCK_CHAT_COUNT });
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedChats, setSelectedChats] = useState<Set<number>>(new Set());
+  const { addNotification } = useNotifications();
 
   const toggleSelectMode = () => {
     setIsSelectMode((prev) => !prev);
@@ -35,6 +36,18 @@ export function ChatHistory() {
       }
       return next;
     });
+  };
+
+  const onDeleteSelected = () => {
+    if (selectedChats.size === 0) return;
+    const count = selectedChats.size;
+    addNotification({
+      message: `Deleted ${count} ${count === 1 ? "chat" : "chats"}`,
+      type: "info",
+      duration: 3000,
+    });
+    setIsSelectMode(false);
+    setSelectedChats(new Set());
   };
 
   return (
@@ -73,6 +86,7 @@ export function ChatHistory() {
               size={"icon"}
               variant={"ghost"}
               disabled={selectedChats.size === 0}
+              onClick={onDeleteSelected}
             >
               <Trash />
             </Button>
@@ -86,8 +100,24 @@ export function ChatHistory() {
             const isSelected = selectedChats.has(i);
             return (
               <motion.li
+                // TODO: swap index key for a stable chat id once the list is
+                // backed by real data (breaks exit animations otherwise).
                 key={i}
+                role={isSelectMode ? "checkbox" : undefined}
+                aria-checked={isSelectMode ? isSelected : undefined}
+                aria-label={isSelectMode ? `Select chat ${i + 1}` : undefined}
+                tabIndex={isSelectMode ? 0 : undefined}
                 onClick={() => isSelectMode && toggleChatSelection(i)}
+                onKeyDown={
+                  isSelectMode
+                    ? (e) => {
+                        if (e.key === " " || e.key === "Enter") {
+                          e.preventDefault();
+                          toggleChatSelection(i);
+                        }
+                      }
+                    : undefined
+                }
                 className={cn(
                   "grid cursor-pointer grid-cols-[1fr_auto] bg-neutral-50/80 p-3 hover:bg-orange-50/70",
                   "dark:bg-neutral-900 dark:hover:bg-orange-400/20",
@@ -98,7 +128,7 @@ export function ChatHistory() {
                 )}
               >
                 {isSelectMode && (
-                  <div className="flex items-center pr-3">
+                  <div aria-hidden="true" className="flex items-center pr-3">
                     <div
                       className={cn(
                         "h-5 w-5 rounded-full border-2 transition-colors",
@@ -153,7 +183,7 @@ function ChatDropdownMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={"icon"} variant={"ghost"} className="">
+        <Button size={"icon"} variant={"ghost"}>
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>

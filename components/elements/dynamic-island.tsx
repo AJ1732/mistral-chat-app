@@ -1,10 +1,10 @@
 "use client";
 import { MousePointerClick } from "lucide-react";
 import { AnimatePresence, motion, Variants } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { useNotifications } from "@/provider/notifications";
 import { cn } from "@/lib/utils";
+import { useNotifications } from "@/provider/notifications";
 
 import ThemeToggle from "./theme-toggle";
 
@@ -16,10 +16,17 @@ export default function DynamicIsland() {
   const isError = notification?.type === "error";
   const isLoading = notification?.type === "loading";
 
-  useEffect(() => {
-    if (notification) setExpand(true);
-    else setExpand(false);
-  }, [notification]);
+  // Open when a notification arrives, collapse when it clears. Adjusting state
+  // during render (instead of an effect) keeps the width animation intact while
+  // still letting the button toggle it manually.
+  const [prevNotificationId, setPrevNotificationId] = useState<string | null>(
+    null,
+  );
+  const notificationId = notification?.id ?? null;
+  if (notificationId !== prevNotificationId) {
+    setPrevNotificationId(notificationId);
+    setExpand(notificationId !== null);
+  }
 
   return (
     <section className="fixed inset-x-0 top-4 z-50 flex w-full justify-center gap-3 md:top-3">
@@ -48,7 +55,7 @@ export default function DynamicIsland() {
           ease: [0.4, 0, 0.2, 1],
         }}
         className={cn(
-          "justify-center dark:border-border flex size-full items-center rounded-[1.75rem] border-[0.5px] border-neutral-400 bg-black/70 px-4 py-3 text-sm text-zinc-50 drop-shadow-xl drop-shadow-neutral-400 backdrop-blur-3xl transition-colors duration-300 ease-in dark:bg-black/70 dark:drop-shadow-neutral-950",
+          "dark:border-border flex size-full items-center justify-center rounded-[1.75rem] border-[0.5px] border-neutral-400 bg-black/70 px-4 py-3 text-sm text-zinc-50 drop-shadow-xl drop-shadow-neutral-400 backdrop-blur-3xl transition-colors duration-300 ease-in dark:bg-black/70 dark:drop-shadow-neutral-950",
           { "border-destructive dark:border-destructive/50": isError },
         )}
       >
